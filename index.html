@@ -51,6 +51,60 @@
             text-align: center;
         }
 
+
+        @keyframes slide {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+        @keyframes glow {
+            0%, 100% {
+                text-shadow:
+                        0 0 3px rgba(30, 144, 255, 0.5),
+                        0 0 6px rgba(0, 191, 255, 0.5),
+                        0 0 9px rgba(135, 206, 235, 0.5),
+                        0 0 12px rgba(30, 144, 255, 0.5),
+                        0 0 15px rgba(0, 191, 255, 0.5),
+                        0 0 18px rgba(135, 206, 235, 0.5),
+                        0 0 21px rgba(30, 144, 255, 0.5);
+            }
+            50% {
+                text-shadow:
+                        0 0 15px rgba(30, 144, 255, 0.5),
+                        0 0 20px rgba(0, 191, 255, 0.5),
+                        0 0 25px rgba(135, 206, 235, 0.5),
+                        0 0 30px rgba(30, 144, 255, 0.5),
+                        0 0 35px rgba(0, 191, 255, 0.5),
+                        0 0 40px rgba(135, 206, 235, 0.5),
+                        0 0 45px rgba(30, 144, 255, 0.5);
+            }
+        }
+
+        #comingSoon {
+            position: relative;
+            overflow: hidden;
+        }
+        #comingSoon::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent); /* Adjust the alpha here */
+            z-index: 1;
+            animation: slide 3s infinite;
+        }
+        #comingSoon span {
+            position: relative;
+            z-index: 2;
+            animation: glow 3s infinite alternate;
+            text-align: center;
+            line-height: 1.2;
+        }
     </style>
 </head>
 <body class="bg-gray-800 text-white flex flex-col items-center justify-center min-h-screen">
@@ -66,11 +120,15 @@
                 <h1 class="text-6xl opacity-0 transition-opacity duration-1000" id="companyName">BALKAN BEAKON LTD.</h1>
                 <h2 class="text-4xl mt-2 opacity-0 transition-opacity duration-1000" id="presents">Presents:</h2>
                 <h2 class="text-4xl mt-2 opacity-0 transition-opacity duration-1000" id="productTitle" style="font-family: 'Courier New', Courier, monospace;">I'm In Dance</h2>
-                <p class="text-2xl mt-4 opacity-0 transition-opacity duration-1000" id="description">
+                <p class="text-gray-600 text-2xl mt-4 opacity-0 transition-opacity duration-1000" id="description">
                     Our brand-new platform is on the way! Get ready to discover events, connect with artists, and dance like never before.
                 </p>
             </div>
             <div id="timer" class="w-full lg:w-1/2 p-4 lg:pl-24 flex flex-col items-center opacity-0 transition-opacity duration-1000">
+                <div id="comingSoon" class="text-8xl font-bold mt-12 mb-12 opacity-0 transition-opacity duration-1000">
+                    <span>COMING SOON!</span>
+                </div>
+                <p id="overdueMessage" class="text-2xl mt-4 text-red-500 hidden">We've hit a tiny snag but rest assured, we're working hard to get you back on track!</p>
                 <!-- Timer -->
                 <div class="flex justify-center items-center">
                     <div class="time-container mx-2">
@@ -90,13 +148,12 @@
                         <div class="time-box text-5xl font-bold rounded-full p-8 shadow-lg bg-black bg-opacity-50" id="seconds">00</div>
                     </div>
                 </div>
-                <p id="overdueMessage" class="text-2xl mt-4 text-red-500 hidden">We've hit a tiny snag but rest assured, we're working hard to get you back on track!</p>
             </div>
         </section>
 
         <!-- Carousel Section -->
         <section id="carouselSection" class="flex flex-col mt-8 opacity-0 transition-opacity duration-1000 relative">
-            <p class="text-2xl mb-4 text-center">Discover What's Happening On Global Dance Floors!</p>
+            <p class="text-gray-600 text-2xl mb-4 text-center">Discover What's Happening On Global Dance Floors!</p>
             <div class="flex justify-center bg-opacity-50 bg-black rounded p-4 relative overflow-hidden" style="height:420px;">
                 <img id="carouselImg" class="object-cover w-full" style="height: 400px; transition: opacity 1s;" />
             </div>
@@ -133,9 +190,30 @@
             setTimeout(() => { document.getElementById('maintenanceSection').style.opacity = '1'; }, 1000);
             setTimeout(() => { document.getElementById('carouselSection').style.opacity = '1'; }, 2000);
             setTimeout(() => { document.querySelector('footer').style.opacity = '1'; }, 3000);
+            setTimeout(() => { document.getElementById('comingSoon').style.opacity = '1'; }, 6000);
 
             // Carousel
-            const carouselImages = ["img/event1.jpg", "img/event2.jpg", "img/event3.jpg", "img/event4.jpg", "img/event5.jpg", "img/event6.jpg"];
+            const carouselImages = [
+                "img/event1.jpg",
+                "img/event2.jpg",
+                "img/event3.jpg",
+                "img/event4.jpg",
+                "img/event5.jpg",
+                "img/event6.jpg",
+                "img/event7.jpg",
+                "img/event8.jpg",
+                "img/event9.jpg",
+                "img/event10.jpg",
+                "img/event11.jpg",
+                "img/event12.jpg",
+                "img/event13.jpg",
+                "img/event14.jpg",
+                "img/event15.jpg",
+                "img/event16.jpg",
+                "img/event17.jpg",
+                "img/event18.jpg",
+                "img/event19.jpg",
+                "img/event20.jpg"];
             let currentImageIndex = 0;
             function updateCarousel() {
                 const newImg = document.getElementById('carouselImg');
@@ -167,7 +245,7 @@
                 if (remainingTime <= 0) {
                     document.getElementById("overdueMessage").classList.remove("hidden");
                     timeBoxes.forEach(el => el.classList.add('overdue-time'));
-                } else if (remainingTime <= 0.3 * initialTime && remainingTime > 0) {
+                } else if (remainingTime <= 0.2 * initialTime && remainingTime > 0) {
                     timeBoxes.forEach(el => el.classList.add('warn-time'));
                 } else {
                     timeBoxes.forEach(el => el.classList.add('normal-time'));
