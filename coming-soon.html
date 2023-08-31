@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IMIN DANCE - Under Maintenance</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .normal-time {
+            background: linear-gradient(135deg, #4d4d4d 0%, #333333 100%);
+        }
+        .warn-time {
+            background: linear-gradient(135deg, #FFDD55 0%, #FF9900 100%);
+            animation: blink 1s infinite;
+        }
+        .overdue-time {
+            background: linear-gradient(135deg, #FF8888 0%, #FF6666 100%);
+        }
+        .button-overlay {
+            color: white;
+        }
+
+        #backgroundVideo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            object-fit: cover;
+        }
+
+        .time-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .time-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .label {
+            margin-bottom: 8px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-800 text-white flex flex-col items-center justify-center min-h-screen">
+    <!-- Video Element -->
+    <video id="backgroundVideo" autoplay loop muted>
+        <source src="videos/732819257.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div id="contentWrapper" class="w-full max-w-3xl p-8 opacity-0">
+        <!-- Maintenance Section -->
+        <section id="maintenanceSection" class="flex flex-wrap flex-col md:flex-row opacity-0 transition-opacity duration-1000">
+            <div class="w-full lg:w-1/2 p-4 lg:pr-24">
+                <h1 class="text-6xl opacity-0 transition-opacity duration-1000" id="companyName">BALKAN BEAKON</h1>
+                <h2 class="text-4xl mt-2 opacity-0 transition-opacity duration-1000" id="presents">Presents:</h2>
+                <h2 class="text-4xl mt-2 opacity-0 transition-opacity duration-1000" id="productTitle" style="font-family: 'Courier New', Courier, monospace;">I'm In Dance</h2>
+                <p class="text-2xl mt-4 opacity-0 transition-opacity duration-1000" id="description">
+                    Our brand-new platform is on the way! Get ready to discover events, connect with artists, and dance like never before.
+                </p>
+            </div>
+            <div class="w-full lg:w-1/2 p-4 lg:pl-24 flex flex-col items-center">
+                <!-- Timer -->
+                <div id="timer" class="flex justify-center items-center opacity-0 transition-opacity duration-1000">
+                    <div class="time-container mx-2">
+                        <div class="label">DD</div>
+                        <div class="time-box text-5xl font-bold rounded-full p-8 shadow-lg bg-black bg-opacity-50" id="days">00</div>
+                    </div>
+                    <div class="time-container mx-2">
+                        <div class="label">HH</div>
+                        <div class="time-box text-5xl font-bold rounded-full p-8 shadow-lg bg-black bg-opacity-50" id="hours">00</div>
+                    </div>
+                    <div class="time-container mx-2">
+                        <div class="label">MM</div>
+                        <div class="time-box text-5xl font-bold rounded-full p-8 shadow-lg bg-black bg-opacity-50" id="minutes">00</div>
+                    </div>
+                    <div class="time-container mx-2">
+                        <div class="label">SS</div>
+                        <div class="time-box text-5xl font-bold rounded-full p-8 shadow-lg bg-black bg-opacity-50" id="seconds">00</div>
+                    </div>
+                </div>
+                <p id="overdueMessage" class="text-2xl mt-4 text-red-500 hidden">We've hit a tiny snag but rest assured, we're working hard to get you back on track!</p>
+            </div>
+        </section>
+
+        <!-- Carousel Section -->
+        <section id="carouselSection" class="flex flex-col mt-8 opacity-0 transition-opacity duration-1000 relative">
+            <p class="text-2xl mb-4 text-center">Discover What's Happening On Global Dance Floors!</p>
+            <div class="flex justify-center bg-opacity-50 bg-black rounded p-4 relative overflow-hidden" style="height:420px;">
+                <img id="carouselImg" class="object-cover w-full" style="height: 400px; transition: opacity 1s;" />
+            </div>
+            <div class="flex justify-between mt-2">
+                <button id="prevBtn" class="button-overlay text-4xl">←</button>
+                <button id="nextBtn" class="button-overlay text-4xl">→</button>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="flex justify-center mt-12 opacity-0 transition-opacity duration-1000">
+            <a href="#" class="mx-2"><img src="facebook-icon.png" alt="Facebook" width="30"></a>
+            <a href="#" class="mx-2"><img src="instagram-icon.png" alt="Instagram" width="30"></a>
+            <a href="#" class="mx-2"><img src="twitter-icon.png" alt="Twitter" width="30"></a>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            // Initializations
+            let remainingTime = 30 * 1000;  // 30 seconds
+            let initialTime = remainingTime; // Save initial time for later calculations
+            let overdue = false;
+            // Target Date
+            const targetDate = new Date('2023-08-31T20:55:00'); // YYYY-MM-DDTHH:mm:ss
+
+            // Function to calculate remaining time
+            function calculateRemainingTime(target) {
+                const now = new Date();
+                return target - now;
+            }
+            initialTime = calculateRemainingTime(targetDate);
+
+            // Displaying content
+            setTimeout(() => { document.getElementById('contentWrapper').style.opacity = '1'; }, 500);
+            setTimeout(() => { document.getElementById('maintenanceSection').style.opacity = '1'; }, 1000);
+            setTimeout(() => { document.getElementById('carouselSection').style.opacity = '1'; }, 2000);
+            setTimeout(() => { document.querySelector('footer').style.opacity = '1'; }, 3000);
+
+            // Carousel
+            const carouselImages = ["img/event1.jpg", "img/event2.jpg", "img/event3.jpg", "img/event4.jpg", "img/event5.jpg", "img/event6.jpg"];
+            let currentImageIndex = 0;
+            function updateCarousel() {
+                const newImg = document.getElementById('carouselImg');
+                newImg.style.opacity = '0';
+                setTimeout(() => {
+                    newImg.src = carouselImages[currentImageIndex];
+                    newImg.style.opacity = '1';
+                }, 1000);
+            }
+            document.getElementById("prevBtn").addEventListener("click", () => {
+                currentImageIndex = (currentImageIndex - 1 + carouselImages.length) % carouselImages.length;
+                updateCarousel();
+            });
+            document.getElementById("nextBtn").addEventListener("click", () => {
+                currentImageIndex = (currentImageIndex + 1) % carouselImages.length;
+                updateCarousel();
+            });
+            setInterval(() => {
+                currentImageIndex = (currentImageIndex + 1) % carouselImages.length;
+                updateCarousel();
+            }, 5000);
+            updateCarousel();
+
+            // Timer
+            function updateTimer() {
+                let timeBoxes = document.querySelectorAll('.time-box');
+                let remainingTime = calculateRemainingTime(targetDate);
+                if (overdue) {
+                    remainingTime += 1000;
+                } else {
+                    remainingTime -= 1000;
+                }
+                timeBoxes.forEach(el => el.classList.remove('normal-time', 'warn-time', 'overdue-time'));
+                if (remainingTime <= 0) {
+                    overdue = true;
+                    document.getElementById("overdueMessage").classList.remove("hidden");
+                }
+                if (overdue || remainingTime == 0) {
+                    timeBoxes.forEach(el => el.classList.add('overdue-time'));
+                } else if (remainingTime <= 0.3 * initialTime && remainingTime > 0) {
+                    timeBoxes.forEach(el => el.classList.add('warn-time'));
+                } else {
+                    timeBoxes.forEach(el => el.classList.add('normal-time'));
+                }
+
+                const days = String(Math.floor(remainingTime / (1000 * 60 * 60 * 24))).padStart(2, '0');
+                const hours = String(Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                const minutes = String(Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                const seconds = String(Math.floor((remainingTime % (1000 * 60)) / 1000)).padStart(2, '0');
+
+                document.getElementById("days").innerText = days;
+                document.getElementById("hours").innerText = hours;
+                document.getElementById("minutes").innerText = minutes;
+                document.getElementById("seconds").innerText = seconds;
+            }
+            setInterval(updateTimer, 1000);
+            updateTimer();
+
+            setTimeout(() => { document.getElementById('companyName').style.opacity = '1'; }, 1000);
+            setTimeout(() => { document.getElementById('presents').style.opacity = '1'; }, 2000);
+            setTimeout(() => { document.getElementById('productTitle').style.opacity = '1'; }, 3000);
+            setTimeout(() => { document.getElementById('description').style.opacity = '1'; }, 4000);
+            setTimeout(() => { document.getElementById('timer').style.opacity = '1'; }, 5000);
+        });
+    </script>
+</body>
+</html>
