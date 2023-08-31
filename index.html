@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>IMIN DANCE - Under Maintenance</title>
+    <title>IMIN DANCE - Under Coming Soon</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
     <style>
         @keyframes blink {
@@ -63,16 +63,16 @@
         <!-- Maintenance Section -->
         <section id="maintenanceSection" class="flex flex-wrap flex-col md:flex-row opacity-0 transition-opacity duration-1000">
             <div class="w-full lg:w-1/2 p-4 lg:pr-24">
-                <h1 class="text-6xl opacity-0 transition-opacity duration-1000" id="companyName">BALKAN BEAKON</h1>
+                <h1 class="text-6xl opacity-0 transition-opacity duration-1000" id="companyName">BALKAN BEAKON LTD.</h1>
                 <h2 class="text-4xl mt-2 opacity-0 transition-opacity duration-1000" id="presents">Presents:</h2>
                 <h2 class="text-4xl mt-2 opacity-0 transition-opacity duration-1000" id="productTitle" style="font-family: 'Courier New', Courier, monospace;">I'm In Dance</h2>
                 <p class="text-2xl mt-4 opacity-0 transition-opacity duration-1000" id="description">
                     Our brand-new platform is on the way! Get ready to discover events, connect with artists, and dance like never before.
                 </p>
             </div>
-            <div class="w-full lg:w-1/2 p-4 lg:pl-24 flex flex-col items-center">
+            <div id="timer" class="w-full lg:w-1/2 p-4 lg:pl-24 flex flex-col items-center opacity-0 transition-opacity duration-1000">
                 <!-- Timer -->
-                <div id="timer" class="flex justify-center items-center opacity-0 transition-opacity duration-1000">
+                <div class="flex justify-center items-center">
                     <div class="time-container mx-2">
                         <div class="label">DD</div>
                         <div class="time-box text-5xl font-bold rounded-full p-8 shadow-lg bg-black bg-opacity-50" id="days">00</div>
@@ -118,18 +118,15 @@
     <script>
         window.addEventListener('DOMContentLoaded', (event) => {
             // Initializations
-            let remainingTime = 30 * 1000;  // 30 seconds
-            let initialTime = remainingTime; // Save initial time for later calculations
-            let overdue = false;
             // Target Date
-            const targetDate = new Date('2023-08-31T20:55:00'); // YYYY-MM-DDTHH:mm:ss
-
+            const targetDate = new Date('2023-11-01T20:55:00'); // YYYY-MM-DDTHH:mm:ss
             // Function to calculate remaining time
             function calculateRemainingTime(target) {
                 const now = new Date();
                 return target - now;
             }
-            initialTime = calculateRemainingTime(targetDate);
+            // Save initial diff time for later calculations
+            const initialTime = targetDate - new Date('2023-08-01T00:00:00'); // YYYY-MM-DDTHH:mm:ss
 
             // Displaying content
             setTimeout(() => { document.getElementById('contentWrapper').style.opacity = '1'; }, 500);
@@ -165,18 +162,10 @@
             // Timer
             function updateTimer() {
                 let timeBoxes = document.querySelectorAll('.time-box');
-                let remainingTime = calculateRemainingTime(targetDate);
-                if (overdue) {
-                    remainingTime += 1000;
-                } else {
-                    remainingTime -= 1000;
-                }
+                const remainingTime = calculateRemainingTime(targetDate);
                 timeBoxes.forEach(el => el.classList.remove('normal-time', 'warn-time', 'overdue-time'));
                 if (remainingTime <= 0) {
-                    overdue = true;
                     document.getElementById("overdueMessage").classList.remove("hidden");
-                }
-                if (overdue || remainingTime == 0) {
                     timeBoxes.forEach(el => el.classList.add('overdue-time'));
                 } else if (remainingTime <= 0.3 * initialTime && remainingTime > 0) {
                     timeBoxes.forEach(el => el.classList.add('warn-time'));
@@ -184,10 +173,10 @@
                     timeBoxes.forEach(el => el.classList.add('normal-time'));
                 }
 
-                const days = String(Math.floor(remainingTime / (1000 * 60 * 60 * 24))).padStart(2, '0');
-                const hours = String(Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                const minutes = String(Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                const seconds = String(Math.floor((remainingTime % (1000 * 60)) / 1000)).padStart(2, '0');
+                const days = String(Math.floor(Math.abs(remainingTime) / (1000 * 60 * 60 * 24))).padStart(2, '0');
+                const hours = String(Math.floor((Math.abs(remainingTime) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                const minutes = String(Math.floor((Math.abs(remainingTime) % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                const seconds = String(Math.floor((Math.abs(remainingTime) % (1000 * 60)) / 1000)).padStart(2, '0');
 
                 document.getElementById("days").innerText = days;
                 document.getElementById("hours").innerText = hours;
