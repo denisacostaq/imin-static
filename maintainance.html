@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IMIN DANCE - Under Maintenance</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .normal-time {
+            background: linear-gradient(135deg, #4d4d4d 0%, #333333 100%);
+        }
+        .warn-time {
+            background: linear-gradient(135deg, #FFDD55 0%, #FF9900 100%);
+            animation: blink 1s infinite;
+        }
+        .overdue-time {
+            background: linear-gradient(135deg, #FF8888 0%, #FF6666 100%);
+        }
+        .button-overlay {
+            color: white;
+        }
+        #carouselImg {
+            max-width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            transition: opacity 1s;
+        }
+    </style>
+</head>
+<body class="bg-gray-800 text-white flex flex-col items-center justify-center min-h-screen">
+    <div id="contentWrapper" class="w-full max-w-3xl p-8 opacity-0">
+        <!-- Maintenance Section -->
+        <section id="maintenanceSection" class="flex flex-wrap flex-col md:flex-row opacity-0 transition-opacity duration-1000">
+            <div class="w-full lg:w-1/2 p-4">
+                <h1 class="text-6xl">Balkan Beakon Presents:</h1>
+                <h2 class="text-4xl mt-2">IMIN DANCE</h2>
+                <p class="text-2xl mt-4">
+                    Discover events, connect with artists, and dance the night away. We're currently upgrading our platform to make your experience even better!
+                </p>
+            </div>
+            <div class="w-full lg:w-1/2 p-4 flex flex-col items-center">
+                <!-- Timer -->
+                <div id="timer" class="flex justify-center items-center">
+                    <div class="time-box text-5xl font-bold mx-4 rounded-full p-8 shadow-lg" id="hours">00</div>
+                    <div class="time-box text-5xl font-bold mx-4 rounded-full p-8 shadow-lg" id="minutes">00</div>
+                    <div class="time-box text-5xl font-bold mx-4 rounded-full p-8 shadow-lg" id="seconds">00</div>
+                </div>
+                <p id="overdueMessage" class="text-2xl mt-4 text-red-500 hidden">We've hit a tiny snag but rest assured, we're working hard to get you back on track!</p>
+            </div>
+        </section>
+
+        <!-- Carousel Section -->
+        <section id="carouselSection" class="flex flex-col mt-8 opacity-0 transition-opacity duration-1000 relative">
+            <p class="text-2xl mb-4 text-center">Discover What's Happening On Global Dance Floors!</p>
+            <div id="carousel" class="flex justify-center relative" style="height:400px;">
+                <img id="carouselImg" style="height:400px;object-fit:cover; transition: opacity 1s;" />
+            </div>
+            <div class="flex justify-between mt-2">
+                <button id="prevBtn" class="button-overlay text-4xl">←</button>
+                <button id="nextBtn" class="button-overlay text-4xl">→</button>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="flex justify-center mt-12 opacity-0 transition-opacity duration-1000">
+            <a href="#" class="mx-2"><img src="facebook-icon.png" alt="Facebook" width="30"></a>
+            <a href="#" class="mx-2"><img src="instagram-icon.png" alt="Instagram" width="30"></a>
+            <a href="#" class="mx-2"><img src="twitter-icon.png" alt="Twitter" width="30"></a>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            // Initializations
+            let remainingTime = 10 * 1000;  // 10 seconds
+            let initialTime = remainingTime; // Save initial time for later calculations
+            let overdue = false;
+
+            // Displaying content
+            setTimeout(() => { document.getElementById('contentWrapper').style.opacity = '1'; }, 500);
+            setTimeout(() => { document.getElementById('maintenanceSection').style.opacity = '1'; }, 1000);
+            setTimeout(() => { document.getElementById('carouselSection').style.opacity = '1'; }, 2000);
+            setTimeout(() => { document.querySelector('footer').style.opacity = '1'; }, 3000);
+
+            // Carousel
+            const carouselImages = ["event1.jpg", "event2.jpg", "event3.jpeg", "event4.jpeg", "event6.jpeg"];
+            let currentImageIndex = 0;
+            function updateCarousel() {
+                const newImg = document.getElementById('carouselImg');
+                newImg.style.opacity = '0';
+                setTimeout(() => {
+                    newImg.src = carouselImages[currentImageIndex];
+                    newImg.style.opacity = '1';
+                }, 1000);
+            }
+            document.getElementById("prevBtn").addEventListener("click", () => {
+                currentImageIndex = (currentImageIndex - 1 + carouselImages.length) % carouselImages.length;
+                updateCarousel();
+            });
+            document.getElementById("nextBtn").addEventListener("click", () => {
+                currentImageIndex = (currentImageIndex + 1) % carouselImages.length;
+                updateCarousel();
+            });
+            setInterval(() => {
+                currentImageIndex = (currentImageIndex + 1) % carouselImages.length;
+                updateCarousel();
+            }, 5000);
+            updateCarousel();
+
+            // Timer
+            function updateTimer() {
+                let timeBoxes = document.querySelectorAll('.time-box');
+                if (overdue) {
+                    remainingTime += 1000;
+                } else {
+                    remainingTime -= 1000;
+                }
+                timeBoxes.forEach(el => el.classList.remove('normal-time', 'warn-time', 'overdue-time'));
+                if (remainingTime <= 0) {
+                    overdue = true;
+                    document.getElementById("overdueMessage").classList.remove("hidden");
+                }
+                if (overdue || remainingTime == 0) {
+                    timeBoxes.forEach(el => el.classList.add('overdue-time'));
+                } else if (remainingTime <= 0.3 * initialTime && remainingTime > 0) {
+                    timeBoxes.forEach(el => el.classList.add('warn-time'));
+                } else {
+                    timeBoxes.forEach(el => el.classList.add('normal-time'));
+                }
+
+                const hours = String(Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                const minutes = String(Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                const seconds = String(Math.floor((remainingTime % (1000 * 60)) / 1000)).padStart(2, '0');
+
+                document.getElementById("hours").innerText = hours;
+                document.getElementById("minutes").innerText = minutes;
+                document.getElementById("seconds").innerText = seconds;
+            }
+            setInterval(updateTimer, 1000);
+            updateTimer();
+        });
+    </script>
+</body>
+</html>
