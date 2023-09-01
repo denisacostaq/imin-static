@@ -24,33 +24,6 @@
             color: white;
         }
 
-        #backgroundVideo {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            object-fit: cover;
-        }
-
-        .time-box {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .time-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .label {
-            margin-bottom: 8px;
-            font-size: 18px;
-            text-align: center;
-        }
-
 
         @keyframes slide {
             0% {
@@ -82,11 +55,6 @@
                         0 0 45px rgba(30, 144, 255, 0.5);
             }
         }
-
-        #comingSoon {
-            position: relative;
-            overflow: hidden;
-        }
         #comingSoon::before {
             content: "";
             position: absolute;
@@ -99,63 +67,72 @@
             animation: slide 3s infinite;
         }
         #comingSoon span {
-            position: relative;
             z-index: 2;
             animation: glow 3s infinite alternate;
-            text-align: center;
-            line-height: 1.2;
         }
     </style>
 </head>
 <body class="bg-gray-800 text-white flex flex-col items-center justify-center min-h-screen">
     <!-- Video Element -->
-    <video id="backgroundVideo" autoplay loop muted>
+    <video autoplay loop muted class="fixed top-0 left-0 w-full h-full object-cover" style="z-index: -1;">
         <source src="videos/732819257.mp4" type="video/mp4">
-        Your browser does not support the video tag.
+        Your browser does not support video.
     </video>
-    <div id="contentWrapper" class="w-full max-w-3xl p-8 opacity-0">
+    <div id="contentWrapper" class="w-full max-w-5xl p-8 opacity-0">
         <!-- Maintenance Section -->
-        <section id="maintenanceSection" class="flex flex-wrap flex-col md:flex-row opacity-0 transition-opacity duration-1000">
-            <div class="w-full lg:w-1/2 p-4 lg:pr-24">
-                <h1 class="text-6xl opacity-0 transition-opacity duration-1000" id="companyName">BALKAN BEAKON LTD.</h1>
-                <h2 class="text-4xl mt-2 opacity-0 transition-opacity duration-1000" id="presents">Presents:</h2>
-                <h2 class="text-4xl mt-2 opacity-0 transition-opacity duration-1000" id="productTitle" style="font-family: 'Courier New', Courier, monospace;">I'm In Dance</h2>
-                <p class="text-gray-600 text-2xl mt-4 opacity-0 transition-opacity duration-1000" id="description">
+        <section id="maintenanceSection" class="flex flex-wrap flex-col md:flex-row w-full opacity-0 transition-opacity duration-1000">
+            <div class="w-full lg:w-1/2 lg:pr-24">
+                <h1 class="w-full text-center justify-center font-bold text-6xl opacity-0 transition-opacity duration-1000" id="companyName">
+                    BALKAN BEAKON LTD.
+                </h1>
+                <div class="flex flex-col text-center justify-center items-center">
+                    <div class="flex flex-col" style="font-family: 'Courier New', monospace;">
+                        <h2 class="text-4xl mt-2 opacity-0 transition-opacity duration-1000" id="presents">Presents:</h2>
+                        <div class="flex flex-col text-4xl mt-2 opacity-0 transition-opacity duration-1000" id="productTitle">
+                            <h2>I'm In Dance</h2>
+                            <img class="mx-auto block" src="logo.svg" alt="Logo" width="200"/>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-black text-2xl mt-4 opacity-0 transition-opacity duration-1000" id="description">
                     Our brand-new platform is on the way! Get ready to discover events, connect with artists, and dance like never before.
                 </p>
             </div>
-            <div id="timer" class="w-full lg:w-1/2 p-4 lg:pl-24 flex flex-col items-center opacity-0 transition-opacity duration-1000">
-                <div id="comingSoon" class="text-8xl font-bold mt-12 mb-12 opacity-0 transition-opacity duration-1000">
-                    <span>COMING SOON!</span>
+            <div id="timer" class="flex flex-col items-center w-full lg:w-1/2 p-4 lg:pl-24 opacity-0 transition-opacity duration-1000">
+                <div id="comingSoon" class="text-8xl font-bold mt-12 mb-12 relative overflow-hidden opacity-0 transition-opacity duration-1000">
+                    <span class="relative" style="text-align: center;">COMING SOON!</span>
                 </div>
-                <p id="overdueMessage" class="text-2xl mt-4 text-red-500 hidden">We've hit a tiny snag but rest assured, we're working hard to get you back on track!</p>
+                <p id="overdueMessage" class="text-2xl mt-4 mb-6 text-red-600 hidden">
+                    We've hit a tiny snag but rest assured, we're working hard to get you back on track!
+                </p>
                 <!-- Timer -->
                 <div class="flex justify-center items-center">
-                    <div class="time-container mx-2">
-                        <div class="label">DD</div>
+                    <div class="flex flex-col items-center mx-2">
+                        <div class="mb-2 text-xl text-center">DD</div>
                         <div class="time-box text-5xl font-bold rounded-full p-8 shadow-lg bg-black bg-opacity-50" id="days">00</div>
                     </div>
-                    <div class="time-container mx-2">
-                        <div class="label">HH</div>
+                    <div class="flex flex-col items-center mx-2">
+                        <div class="mb-2 text-xl text-center">HH</div>
                         <div class="time-box text-5xl font-bold rounded-full p-8 shadow-lg bg-black bg-opacity-50" id="hours">00</div>
                     </div>
-                    <div class="time-container mx-2">
-                        <div class="label">MM</div>
+                    <div class="flex flex-col items-center mx-2">
+                        <div class="mb-2 text-xl text-center">MM</div>
                         <div class="time-box text-5xl font-bold rounded-full p-8 shadow-lg bg-black bg-opacity-50" id="minutes">00</div>
                     </div>
-                    <div class="time-container mx-2">
-                        <div class="label">SS</div>
+                    <div class="flex flex-col items-center mx-2">
+                        <div class="mb-2 text-xl text-center">SS</div>
                         <div class="time-box text-5xl font-bold rounded-full p-8 shadow-lg bg-black bg-opacity-50" id="seconds">00</div>
                     </div>
                 </div>
             </div>
         </section>
-
         <!-- Carousel Section -->
-        <section id="carouselSection" class="flex flex-col mt-8 opacity-0 transition-opacity duration-1000 relative">
-            <p class="text-gray-600 text-2xl mb-4 text-center">Discover What's Happening On Global Dance Floors!</p>
-            <div class="flex justify-center bg-opacity-50 bg-black rounded p-4 relative overflow-hidden" style="height:420px;">
-                <img id="carouselImg" class="object-cover w-full" style="height: 400px; transition: opacity 1s;" />
+        <section id="carouselSection" class="flex flex-col w-4xl md:w-2xl mt-8 opacity-0 transition-opacity duration-1000 relative">
+            <p class="text-gray-800 bg-opacity-30 bg-white text-2xl mb-4 text-center rounded-md">
+                Discover What's Happening On Global Dance Floors!
+            </p>
+            <div class="w-full flex justify-center bg-opacity-50 bg-black rounded relative" style="padding-top: 56.25%;">
+                <img id="carouselImg" class="absolute top-0 left-0 w-full h-full p-3 object-cover" style="transition: opacity 1s;" />
             </div>
             <div class="flex justify-between mt-2">
                 <button id="prevBtn" class="button-overlay text-4xl">←</button>
@@ -245,10 +222,13 @@
                 if (remainingTime <= 0) {
                     document.getElementById("overdueMessage").classList.remove("hidden");
                     timeBoxes.forEach(el => el.classList.add('overdue-time'));
-                } else if (remainingTime <= 0.2 * initialTime && remainingTime > 0) {
-                    timeBoxes.forEach(el => el.classList.add('warn-time'));
                 } else {
-                    timeBoxes.forEach(el => el.classList.add('normal-time'));
+                    document.getElementById("comingSoon").classList.remove("hidden");
+                    if (remainingTime <= 0.2 * initialTime && remainingTime > 0) {
+                        timeBoxes.forEach(el => el.classList.add('warn-time'));
+                    } else {
+                        timeBoxes.forEach(el => el.classList.add('normal-time'));
+                    }
                 }
 
                 const days = String(Math.floor(Math.abs(remainingTime) / (1000 * 60 * 60 * 24))).padStart(2, '0');
